@@ -1,13 +1,17 @@
-FROM python:3.10-slim
+FROM python:3.11.5-alpine3.18
 
 # set the working directory
 WORKDIR /code
 
+COPY requirements.txt requirements.txt
+
+# install dependencies
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
 # Copy src
 COPY ./src ./src
 
-# install dependencies
-RUN pip install --no-cache-dir --upgrade -r ./src/requirements.txt
+EXPOSE 80
 
 # start the server
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80", "--reload"]
+CMD ["uvicorn", "src.main:app", "--host", "localhost", "--port", "80", "--reload"]
